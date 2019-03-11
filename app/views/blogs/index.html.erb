@@ -1,0 +1,19 @@
+<h1>一覧表示</h1>
+<table>
+  <tr>
+    <th>title</th>
+    <th>content</th>
+    <th>detail</th>
+    <th>edit</th>
+    <th>delete</th>
+  <% @blogs.each do |blog| %>
+    </tr>
+      <td><%= blog.title  %></td>
+      <td><%= blog.content %></td>
+      <td><%= link_to 'detail', blog_path(blog.id) %></td>
+      <td><%= link_to 'edit',edit_blog_path(blog.id)  %></td>
+      <td><%= link_to 'delet', blog_path(blog.id),method: :delete %></td>
+    </tr>
+  <% end %>
+</table>
+<%= link_to "新規作成",new_blog_path %>
