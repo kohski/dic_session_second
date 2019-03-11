@@ -5,14 +5,14 @@ class BlogsController < ApplicationController
 
   def new
     if params[:back]
-      @blog = Blog.new(params.require(:blog).permit(:title,:content))
+      @blog = Blog.new(blog_params)
     else
       @blog = Blog.new
     end
   end
 
   def create
-    @blog = Blog.new(params.require(:blog).permit(:title,:content))
+    @blog = current_user.blogs.build(blog_params)
     if @blog.save
       redirect_to blogs_path
     else
@@ -27,22 +27,35 @@ class BlogsController < ApplicationController
 
   def update
     @blog = Blog.find(params[:id])
-    if @blog.update(params.require(:blog).permit(:title,:content))
+    if @blog.update(blog_params)
       redirect_to blogs_path
     else
       render 'edit'
     end
   end
 
+  def show
+    @blog = Blog.find(params[:id])
+  end
 
   def confirm
-    @blog = Blog.new(params.require(:blog).permit(:title,:content))
+    @blog = current_user.blogs.build(blog_params)
+    render :new if @blog.invalid?
   end
 
-  def delete
-    @blog = Blog.find(paramas[:id])
+  def destroy
+    @blog = Blog.find(params[:id])
     @blog.destroy
+    redirect_to blogs_path
   end
+
+  private
+
+  def blog_params
+    params.require(:blog).permit(:title,:content)
+  end
+
+
 
 
 end
